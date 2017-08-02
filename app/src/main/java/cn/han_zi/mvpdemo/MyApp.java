@@ -28,7 +28,6 @@ public class MyApp extends Application{
 
         //子线程完成其他初始化，解决启动白屏问题
         InitializeService.start(getApplicationContext());
-
     }
 
     public static AppComponent getAppComponent(){

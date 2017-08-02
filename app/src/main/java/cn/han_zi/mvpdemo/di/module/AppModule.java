@@ -4,6 +4,7 @@ package cn.han_zi.mvpdemo.di.module;
 import javax.inject.Singleton;
 
 import cn.han_zi.mvpdemo.MyApp;
+import cn.han_zi.mvpdemo.httplib.RetrofitManager;
 import dagger.Module;
 import dagger.Provides;
 
@@ -19,5 +20,11 @@ public class AppModule {
     @Singleton
     MyApp provideApplicationContext() {
         return application;
+    }
+
+    @Provides
+    @Singleton
+    RetrofitManager provideRetrofitManager(){
+        return RetrofitManager.getInstance(application);
     }
 }

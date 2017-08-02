@@ -1,11 +1,14 @@
 package cn.han_zi.mvpdemo.base;
 
+import android.app.ActivityManager;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 
+import com.facebook.stetho.Stetho;
 import com.squareup.leakcanary.LeakCanary;
 
+import cn.han_zi.mvpdemo.BuildConfig;
 import cn.han_zi.mvpdemo.MyApp;
 
 /**
@@ -35,7 +38,23 @@ public class InitializeService extends IntentService {
     }
 
     private void initApplication(){
-        //初始化内存泄漏检测
-        LeakCanary.install(MyApp.getInstance());
+        String currProcessName = getAppNameByPID(MyApp.getInstance(),android.os.Process.myPid());
+        if (currProcessName.equals(getPackageName())){
+            if (BuildConfig.DEBUG){
+                Stetho.initializeWithDefaults(MyApp.getInstance());
+                //初始化内存泄漏检测
+                LeakCanary.install(MyApp.getInstance());
+            }
+        }
+    }
+
+    public static String getAppNameByPID(Context context, int pid) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (android.app.ActivityManager.RunningAppProcessInfo processInfo : manager.getRunningAppProcesses()) {
+            if (processInfo.pid == pid) {
+                return processInfo.processName;
+            }
+        }
+        return "";
     }
 }

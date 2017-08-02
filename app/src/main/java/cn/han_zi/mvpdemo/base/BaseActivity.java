@@ -11,9 +11,11 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.han_zi.mvpdemo.MyApp;
+import cn.han_zi.mvpdemo.R;
 import cn.han_zi.mvpdemo.di.component.ActivityComponent;
 import cn.han_zi.mvpdemo.di.component.DaggerActivityComponent;
 import cn.han_zi.mvpdemo.di.module.ActivityModule;
+import cn.han_zi.mvpdemo.utils.StatusBarUtil;
 import me.yokeyword.fragmentation.SupportActivity;
 
 /**
@@ -47,11 +49,19 @@ public abstract class BaseActivity<T extends BasePresenter> extends SupportActiv
         mUnBinder = ButterKnife.bind(this);
         mContext = this;
         initInject();
+        setStatusBar();
         if (mPresenter != null){
             mPresenter.attachView(this);
         }
 
         initEventAndData();
+    }
+
+    /**
+     * 设置默认状态栏颜色
+     */
+    protected void setStatusBar(){
+        StatusBarUtil.setColor(this,getResources().getColor(R.color.colorPrimary));
     }
 
     @Override
@@ -96,4 +106,5 @@ public abstract class BaseActivity<T extends BasePresenter> extends SupportActiv
     protected abstract int getLayout();
 
     protected abstract void initEventAndData();
+
 }
